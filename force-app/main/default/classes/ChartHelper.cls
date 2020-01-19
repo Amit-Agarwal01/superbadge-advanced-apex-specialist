@@ -1,10 +1,25 @@
-public with sharing class ChartHelper {
+/**
+ * @File Name          : ChartHelper.cls
+ * @Description        : 
+ * @Author             : wbatista@moldsoft.com.br
+ * @Group              : 
+ * @Last Modified By   : wbatista@moldsoft.com.br
+ * @Last Modified On   : 19/01/2020 11:25:42
+ * @Modification Log   : 
+ * Ver       Date            Author      		    Modification
+ * 1.0    19/01/2020   wbatista@moldsoft.com.br     Initial Version
+**/
+public without sharing class ChartHelper {
 
+    @AuraEnabled
     public static List<chartData> GetInventory(){
         List<chartData> cht = new List<chartData>();
-        //ToDo: Perform a calculation that aggregates active Products that have a positive Quantity_Remaining__c
-        //  And return a list of chartData
-        //  Where the name is the Product Family and the Qty is the sum of the Quantity_Remaining__c
+
+        List<AggregateResult> aggrs = [select SUM(Quantity_Remaining__c) qtd, Family from Product2 where IsActive = true and Quantity_Remaining__c > 0 group by Family];
+        for(AggregateResult aggr: aggrs){
+            cht.add(new ChartData((String)aggr.get('Family'),(Decimal) aggr.get('qtd')));
+        }
+
         return cht;
     }
 
