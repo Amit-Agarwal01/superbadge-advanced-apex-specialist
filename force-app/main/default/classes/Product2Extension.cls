@@ -4,7 +4,7 @@
  * @Author             : wbatista@moldsoft.com.br
  * @Group              : 
  * @Last Modified By   : wbatista@moldsoft.com.br
- * @Last Modified On   : 19/01/2020 12:10:31
+ * @Last Modified On   : 01/02/2020 10:48:50
  * @Modification Log   : 
  * Ver       Date            Author      		    Modification
  * 1.0    19/01/2020   wbatista@moldsoft.com.br     Initial Version
@@ -16,6 +16,10 @@ public class Product2Extension {
     public Product2Extension(ApexPages.StandardController controller){
         productsToInsert = new List<ProductWrapper>();
         AddRows();
+    }
+
+    public Product2Extension(){
+        
     }
 
     public void AddRows(){
