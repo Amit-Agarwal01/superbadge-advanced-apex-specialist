@@ -1,17 +1,16 @@
 /**
  * @File Name          : OrderTests.cls
- * @Description        : 
+ * @Description        :
  * @Author             : wbatista@moldsoft.com.br
- * @Group              : 
+ * @Group              :
  * @Last Modified By   : wbatista@moldsoft.com.br
- * @Last Modified On   : 01/02/2020 12:40:07
- * @Modification Log   : 
- * Ver       Date            Author      		    Modification
+ * @Last Modified On   : 02/02/2020 11:50:11
+ * @Modification Log   :
+ * Ver       Date            Author                  Modification
  * 1.0    01/02/2020   wbatista@moldsoft.com.br     Initial Version
-**/
+ **/
 @isTest
 private class OrderTests {
-
 	@TestSetup
 	static void setupTestData() {
 		TestDataFactory.insertTestData(1);
@@ -26,7 +25,7 @@ private class OrderTests {
 
 		Test.startTest();
 
-			update o;
+		update o;
 
 		Test.stopTest();
 
@@ -35,5 +34,60 @@ private class OrderTests {
 	}
 
 	@isTest
-	private static void orderExtension_UnitTest() {}
+	private static void OrderExtension_UnitTest() {
+		Test.startTest();
+		PageReference pageRef = Page.OrderEdit;
+		Account acct = [select id from Account limit 1];
+
+		Order ord = new Order(
+			AccountId = acct.Id,
+			Name='Test',
+		 	Status=Constants.DRAFT_ORDER_STATUS,
+		    EffectiveDate = Date.today()
+		);
+
+		OrderItem ordItemExistent = [select id, OrderId from OrderItem limit 1];
+
+		ApexPages.StandardController sc = new ApexPages.StandardController(ord);
+
+		OrderExtension ext = new OrderExtension(sc);
+
+		Order ordExistent = new Order(id=ordItemExistent.OrderId);
+		ApexPages.StandardController scExistent = new ApexPages.StandardController(ordExistent);
+
+		OrderExtension extExistent = new OrderExtension(scExistent);
+		extExistent.orderItemMap.values().get(0).Quantity = 2;
+		extExistent.Save();
+
+		extExistent.orderItemMap.values().get(0).Quantity = 0;
+		extExistent.Save();
+
+		ext.selectedFamily =  Constants.PRODUCT_FAMILY[0].getValue();
+		ext.SelectFamily();
+		ext.Save();
+		ext.orderRecord.AccountId = null;
+		ext.Save();
+
+		ext.GetFamilyOptions();
+		ext.GetPageNumber();
+		ext.GetHasNext();
+		ext.GetHasPrevious();
+		ext.GetTotalPages();
+		ext.Next();
+		ext.Last();
+		ext.First();
+		ext.Previous();
+
+		Test.stopTest();
+	}
+
+	@IsTest
+    private static void OrderTrigger_UnitTest(){
+        
+        Test.startTest();
+		Order ord = [select id from Order limit 1];
+		delete ord;
+        Test.stopTest();
+        
+    }
 }

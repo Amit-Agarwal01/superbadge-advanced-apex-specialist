@@ -4,7 +4,7 @@
  * @Author             : wbatista@moldsoft.com.br
  * @Group              :
  * @Last Modified By   : wbatista@moldsoft.com.br
- * @Last Modified On   : 01/02/2020 12:43:47
+ * @Last Modified On   : 02/02/2020 11:48:35
  * @Modification Log   :
  * Ver       Date            Author                  Modification
  * 1.0    01/02/2020   wbatista@moldsoft.com.br     Initial Version
@@ -50,12 +50,13 @@
     private static void Product2Trigger_UnitTest(){
         
         Test.startTest();
+        CollaborationGroup c = TestDataFactory.ConstructCollaborationGroup();
+        insert c;
+
         Product2 newProduct = TestDataFactory.ConstructProducts(1)[0];
         newProduct.Quantity_Ordered__c = 5;
         insert newProduct;
         
-        CollaborationGroup c = TestDataFactory.ConstructCollaborationGroup();
-        insert c;
         
         newProduct.Quantity_Ordered__c=96;
         update newProduct;
